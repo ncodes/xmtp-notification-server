@@ -129,7 +129,7 @@ func waitForShutdown() {
 }
 
 func initDb() *bun.DB {
-	db, err := database.CreateBunDB(opts.DbConnectionString, 30*time.Second)
+	db, err := database.CreateBunDB(opts.DbConnectionString, 10*time.Second)
 	if err != nil {
 		log.Fatal("db creation error", zap.Error(err))
 	}

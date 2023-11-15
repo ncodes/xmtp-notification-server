@@ -4,13 +4,15 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"time"
 
 	"log"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/driver/pgdriver"
 	"github.com/uptrace/bun/migrate"
 	"github.com/xmtp/example-notification-server-go/pkg/db/migrations"
 )
@@ -24,9 +26,15 @@ func CreateBunDB(dsn string, waitForDB time.Duration) (*bun.DB, error) {
 }
 
 func createDB(dsn string, waitForDB time.Duration) (*sql.DB, error) {
-	db := sql.OpenDB(pgdriver.NewConnector(pgdriver.WithDSN(dsn)))
+	config, err := pgx.ParseConfig(dsn)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse config: %w", err)
+	}
+
+	sqldb := stdlib.OpenDB(*config)
+	db := bun.NewDB(sqldb, pgdialect.New())
 	waitUntil := time.Now().Add(waitForDB)
-	err := db.Ping()
+	err = db.Ping()
 	for err != nil && time.Now().Before(waitUntil) {
 		time.Sleep(3 * time.Second)
 		err = db.Ping()
@@ -34,7 +42,7 @@ func createDB(dsn string, waitForDB time.Duration) (*sql.DB, error) {
 	if err != nil {
 		return nil, errors.New("timeout waiting for db")
 	}
-	return db, nil
+	return sqldb, nil
 }
 
 func Migrate(ctx context.Context, db *bun.DB) error {
