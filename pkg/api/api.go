@@ -148,7 +148,6 @@ func (s *ApiServer) Health(
 	w http.ResponseWriter, r *http.Request,
 ) (*connect.Response[emptypb.Empty], error) {
 	s.logger.Info("Health", zap.Any("headers", r.Header))
-	fmt.Println("Health")
 	return connect.NewResponse(&emptypb.Empty{}), nil
 }
 
