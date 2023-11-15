@@ -37,6 +37,9 @@ func NewApiServer(logger *zap.Logger, opts options.ApiOptions, installations int
 
 func (s *ApiServer) Start() {
 	mux := http.NewServeMux()
+	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		s.Health(w, r)
+	})
 	path, handler := protoconnect.NewNotificationsHandler(s)
 	mux.Handle(path, handler)
 	s.httpServer = &http.Server{
@@ -138,6 +141,14 @@ func (s *ApiServer) Unsubscribe(
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
+	return connect.NewResponse(&emptypb.Empty{}), nil
+}
+
+func (s *ApiServer) Health(
+	w http.ResponseWriter, r *http.Request,
+) (*connect.Response[emptypb.Empty], error) {
+	s.logger.Info("Health", zap.Any("headers", r.Header))
+	fmt.Println("Health")
 	return connect.NewResponse(&emptypb.Empty{}), nil
 }
 
