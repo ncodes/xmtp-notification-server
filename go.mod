@@ -5,12 +5,13 @@ go 1.18
 require (
 	firebase.google.com/go/v4 v4.10.0
 	github.com/bufbuild/connect-go v1.1.0
+	github.com/jackc/pgx/v5 v5.5.0
 	github.com/jessevdk/go-flags v1.5.0
 	github.com/pkg/errors v0.8.1
 	github.com/sideshow/apns2 v0.23.0
 	github.com/stretchr/testify v1.8.1
-	github.com/uptrace/bun v1.1.8
-	github.com/uptrace/bun/dialect/pgdialect v1.1.8
+	github.com/uptrace/bun v1.1.16
+	github.com/uptrace/bun/dialect/pgdialect v1.1.16
 	github.com/uptrace/bun/extra/bundebug v1.1.8
 	github.com/xmtp/proto v1.3.2-0.20221114211142-5de75035720f
 	go.uber.org/zap v1.23.0
@@ -20,13 +21,7 @@ require (
 	google.golang.org/protobuf v1.28.1
 )
 
-require (
-	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/puddle/v2 v2.2.1 // indirect
-	github.com/rogpeppe/go-internal v1.11.0 // indirect
-	golang.org/x/sync v0.1.0 // indirect
-)
+require github.com/rogpeppe/go-internal v1.11.0 // indirect
 
 require (
 	cloud.google.com/go v0.102.1 // indirect
@@ -45,10 +40,12 @@ require (
 	github.com/googleapis/enterprise-certificate-proxy v0.1.0 // indirect
 	github.com/googleapis/gax-go/v2 v2.4.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.0 // indirect
-	github.com/jackc/pgx/v5 v5.5.0
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.16 // indirect
+	github.com/mattn/go-isatty v0.0.19 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
@@ -57,10 +54,11 @@ require (
 	go.opencensus.io v0.23.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	golang.org/x/crypto v0.9.0 // indirect
+	golang.org/x/crypto v0.13.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20220909003341-f21342109be1 // indirect
-	golang.org/x/sys v0.8.0 // indirect
-	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/sync v0.1.0 // indirect
+	golang.org/x/sys v0.12.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/appengine/v2 v2.0.2 // indirect
