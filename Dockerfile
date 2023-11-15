@@ -20,8 +20,8 @@ RUN go build \
 FROM alpine:3.12
 
 LABEL maintainer="engineering@xmtp.com"
-LABEL source="https://github.com/xmtp/example-notification-server-go"
-LABEL description="XMTP Example Notification Server"
+LABEL source="https://github.com/jointlabs/xmtp-notification-server"
+LABEL description="XMTP Notification Server"
 
 # color, nocolor, json
 ENV GOLOG_LOG_FMT=nocolor

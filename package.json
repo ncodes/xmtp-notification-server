@@ -1,0 +1,11 @@
+{
+  "name": "notification-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:jointlabs/xmtp-notification-server.git",
+  "author": "Kennedy Idialu <k@joint.cool>",
+  "license": "MIT",
+  "scripts": {
+    "gcr:build-run": "gcloud builds submit --region=$REGION --config dev/gcloud/build_and_deploy.yaml --substitutions=TAG_NAME='latest',_SERVICE_NAME=$SERVICE_NAME,_REGION=$REGION"
+  }
+}
