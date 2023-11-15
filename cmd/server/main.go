@@ -71,6 +71,7 @@ func main() {
 	if opts.Xmtp.ListenerEnabled {
 		var apns *delivery.ApnsDelivery
 		var fcm *delivery.FcmDelivery
+		var email *delivery.EmailDelivery
 		var err error
 
 		if opts.Apns.Enabled {
@@ -87,7 +88,14 @@ func main() {
 			}
 		}
 
-		deliveryService := delivery.NewDeliveryService(logger, apns, fcm)
+		if opts.Email.Enabled {
+			email, err = delivery.NewEmailDelivery(ctx, logger, opts.Email)
+			if err != nil {
+				logger.Fatal("failed to initialize Email", zap.Error(err))
+			}
+		}
+
+		deliveryService := delivery.NewDeliveryService(logger, apns, fcm, email)
 		listener, err = xmtp.NewListener(ctx, logger, opts.Xmtp, installationsService, subscriptionsService, deliveryService, clientVersion, appVersion)
 		if err != nil {
 			logger.Fatal("failed to initialize listener", zap.Error(err))

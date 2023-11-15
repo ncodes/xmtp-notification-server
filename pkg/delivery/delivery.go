@@ -13,13 +13,15 @@ type DefaultDeliveryService struct {
 	notificationTopic string
 	apns              *ApnsDelivery
 	fcm               *FcmDelivery
+	email             *EmailDelivery
 }
 
-func NewDeliveryService(logger *zap.Logger, apns *ApnsDelivery, fcm *FcmDelivery) *DefaultDeliveryService {
+func NewDeliveryService(logger *zap.Logger, apns *ApnsDelivery, fcm *FcmDelivery, email *EmailDelivery) *DefaultDeliveryService {
 	return &DefaultDeliveryService{
 		logger: logger.Named("delivery-service"),
 		apns:   apns,
 		fcm:    fcm,
+		email:  email,
 	}
 }
 
@@ -35,6 +37,11 @@ func (d DefaultDeliveryService) Send(ctx context.Context, req interfaces.SendReq
 		if installation.DeliveryMechanism.Kind == interfaces.FCM && d.fcm != nil {
 			err = d.fcm.Send(ctx, installation.DeliveryMechanism.Token, req.Message.GetContentTopic(), encodedMessage)
 		}
+
+		if installation.DeliveryMechanism.Kind == interfaces.Email && d.email != nil {
+			err = d.email.Send(ctx, installation.DeliveryMechanism.Token, req.Message.GetContentTopic(), encodedMessage)
+		}
+
 		if err != nil {
 			break
 		}

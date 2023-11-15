@@ -10,8 +10,9 @@ import (
 type DeliveryMechanismKind string
 
 const (
-	APNS DeliveryMechanismKind = "apns"
-	FCM  DeliveryMechanismKind = "fcm"
+	APNS  DeliveryMechanismKind = "apns"
+	FCM   DeliveryMechanismKind = "fcm"
+	Email DeliveryMechanismKind = "email"
 )
 
 type DeliveryMechanism struct {
@@ -25,7 +26,8 @@ type RegisterResponse struct {
 	ValidUntil     time.Time
 }
 
-/**
+/*
+*
 An installation represents an app installed on a device. If the app is reinstalled, or installed onto
 a new device it is expected to generate a fresh installation_id.
 */

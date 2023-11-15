@@ -13,7 +13,7 @@ if [ -n "$(go env GOPATH)" ]; then
 fi
 
 if ! command -v buf &>/dev/null; then
-    go install go install github.com/bufbuild/buf/cmd/buf@latest
+    go install github.com/bufbuild/buf/cmd/buf@latest
 fi
 
 if ! command -v protoc-gen-go &>/dev/null; then
@@ -26,4 +26,5 @@ fi
 
 rm -rf ./pkg/proto
 buf build
-buf generate
+buf generate --template="buf.gen.go.yaml"
+npx buf generate --template buf.gen.es.yaml

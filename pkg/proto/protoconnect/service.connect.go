@@ -26,6 +26,27 @@ const (
 	NotificationsName = "notifications.v1.Notifications"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// NotificationsRegisterInstallationProcedure is the fully-qualified name of the Notifications's
+	// RegisterInstallation RPC.
+	NotificationsRegisterInstallationProcedure = "/notifications.v1.Notifications/RegisterInstallation"
+	// NotificationsDeleteInstallationProcedure is the fully-qualified name of the Notifications's
+	// DeleteInstallation RPC.
+	NotificationsDeleteInstallationProcedure = "/notifications.v1.Notifications/DeleteInstallation"
+	// NotificationsSubscribeProcedure is the fully-qualified name of the Notifications's Subscribe RPC.
+	NotificationsSubscribeProcedure = "/notifications.v1.Notifications/Subscribe"
+	// NotificationsUnsubscribeProcedure is the fully-qualified name of the Notifications's Unsubscribe
+	// RPC.
+	NotificationsUnsubscribeProcedure = "/notifications.v1.Notifications/Unsubscribe"
+)
+
 // NotificationsClient is a client for the notifications.v1.Notifications service.
 type NotificationsClient interface {
 	RegisterInstallation(context.Context, *connect_go.Request[proto.RegisterInstallationRequest]) (*connect_go.Response[proto.RegisterInstallationResponse], error)
@@ -46,22 +67,22 @@ func NewNotificationsClient(httpClient connect_go.HTTPClient, baseURL string, op
 	return &notificationsClient{
 		registerInstallation: connect_go.NewClient[proto.RegisterInstallationRequest, proto.RegisterInstallationResponse](
 			httpClient,
-			baseURL+"/notifications.v1.Notifications/RegisterInstallation",
+			baseURL+NotificationsRegisterInstallationProcedure,
 			opts...,
 		),
 		deleteInstallation: connect_go.NewClient[proto.DeleteInstallationRequest, emptypb.Empty](
 			httpClient,
-			baseURL+"/notifications.v1.Notifications/DeleteInstallation",
+			baseURL+NotificationsDeleteInstallationProcedure,
 			opts...,
 		),
 		subscribe: connect_go.NewClient[proto.SubscribeRequest, emptypb.Empty](
 			httpClient,
-			baseURL+"/notifications.v1.Notifications/Subscribe",
+			baseURL+NotificationsSubscribeProcedure,
 			opts...,
 		),
 		unsubscribe: connect_go.NewClient[proto.UnsubscribeRequest, emptypb.Empty](
 			httpClient,
-			baseURL+"/notifications.v1.Notifications/Unsubscribe",
+			baseURL+NotificationsUnsubscribeProcedure,
 			opts...,
 		),
 	}
@@ -109,28 +130,40 @@ type NotificationsHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewNotificationsHandler(svc NotificationsHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle("/notifications.v1.Notifications/RegisterInstallation", connect_go.NewUnaryHandler(
-		"/notifications.v1.Notifications/RegisterInstallation",
+	notificationsRegisterInstallationHandler := connect_go.NewUnaryHandler(
+		NotificationsRegisterInstallationProcedure,
 		svc.RegisterInstallation,
 		opts...,
-	))
-	mux.Handle("/notifications.v1.Notifications/DeleteInstallation", connect_go.NewUnaryHandler(
-		"/notifications.v1.Notifications/DeleteInstallation",
+	)
+	notificationsDeleteInstallationHandler := connect_go.NewUnaryHandler(
+		NotificationsDeleteInstallationProcedure,
 		svc.DeleteInstallation,
 		opts...,
-	))
-	mux.Handle("/notifications.v1.Notifications/Subscribe", connect_go.NewUnaryHandler(
-		"/notifications.v1.Notifications/Subscribe",
+	)
+	notificationsSubscribeHandler := connect_go.NewUnaryHandler(
+		NotificationsSubscribeProcedure,
 		svc.Subscribe,
 		opts...,
-	))
-	mux.Handle("/notifications.v1.Notifications/Unsubscribe", connect_go.NewUnaryHandler(
-		"/notifications.v1.Notifications/Unsubscribe",
+	)
+	notificationsUnsubscribeHandler := connect_go.NewUnaryHandler(
+		NotificationsUnsubscribeProcedure,
 		svc.Unsubscribe,
 		opts...,
-	))
-	return "/notifications.v1.Notifications/", mux
+	)
+	return "/notifications.v1.Notifications/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case NotificationsRegisterInstallationProcedure:
+			notificationsRegisterInstallationHandler.ServeHTTP(w, r)
+		case NotificationsDeleteInstallationProcedure:
+			notificationsDeleteInstallationHandler.ServeHTTP(w, r)
+		case NotificationsSubscribeProcedure:
+			notificationsSubscribeHandler.ServeHTTP(w, r)
+		case NotificationsUnsubscribeProcedure:
+			notificationsUnsubscribeHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedNotificationsHandler returns CodeUnimplemented from all methods.

@@ -147,9 +147,22 @@ func convertDeliveryMechanism(mechanism *proto.DeliveryMechanism) *interfaces.De
 	}
 	apnsToken := mechanism.GetApnsDeviceToken()
 	fcmToken := mechanism.GetFirebaseDeviceToken()
+	emailToken := mechanism.GetEmailDeviceToken()
 	if apnsToken != "" {
-		return &interfaces.DeliveryMechanism{Kind: interfaces.APNS, Token: apnsToken}
-	} else {
-		return &interfaces.DeliveryMechanism{Kind: interfaces.FCM, Token: fcmToken}
+		return &interfaces.DeliveryMechanism{
+			Kind:  interfaces.APNS,
+			Token: apnsToken,
+		}
+	} else if fcmToken != "" {
+		return &interfaces.DeliveryMechanism{
+			Kind:  interfaces.FCM,
+			Token: fcmToken,
+		}
+	} else if emailToken != "" {
+		return &interfaces.DeliveryMechanism{
+			Kind:  interfaces.Email,
+			Token: emailToken,
+		}
 	}
+	panic("invalid delivery mechanism")
 }

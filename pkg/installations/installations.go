@@ -68,7 +68,10 @@ func (s DefaultInstallationService) Register(ctx context.Context, installation i
 
 func (s DefaultInstallationService) Delete(ctx context.Context, installationId string) error {
 	deletedAt := time.Now()
-	installation := &db.Installation{Id: installationId, DeletedAt: &deletedAt}
+	installation := &db.Installation{
+		Id:        installationId,
+		DeletedAt: &deletedAt,
+	}
 	_, err := s.db.NewUpdate().
 		Model(installation).
 		Column("deleted_at").

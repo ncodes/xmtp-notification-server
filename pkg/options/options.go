@@ -21,6 +21,10 @@ type FcmOptions struct {
 	ProjectId       string `long:"fcm-project-id" env:"FCM_PROJECT_ID" description:"FCM Project ID"`
 }
 
+type EmailOptions struct {
+	Enabled bool `long:"email-enabled" env:"EMAIL_ENABLED" description:"Enable email sending"`
+}
+
 type XmtpOptions struct {
 	ListenerEnabled bool   `long:"xmtp-listener" description:"Enable the XMTP listener to actually send notifications. Requires APNSOptions to be configured"`
 	UseTls          bool   `long:"xmtp-listener-tls" description:"Whether to connect to XMTP network using TLS"`
@@ -29,10 +33,11 @@ type XmtpOptions struct {
 }
 
 type Options struct {
-	Api  ApiOptions  `group:"API Options"`
-	Xmtp XmtpOptions `group:"Worker Options"`
-	Apns ApnsOptions `group:"APNS Options"`
-	Fcm  FcmOptions  `group:"FCM Options"`
+	Api   ApiOptions   `group:"API Options"`
+	Xmtp  XmtpOptions  `group:"Worker Options"`
+	Apns  ApnsOptions  `group:"APNS Options"`
+	Fcm   FcmOptions   `group:"FCM Options"`
+	Email EmailOptions `group:"Email Options"`
 
 	DbConnectionString string `short:"d" long:"db-connection-string" env:"DB_CONNECTION_STRING" description:"Address to database"`
 	LogEncoding        string `long:"log-encoding" env:"LOG_ENCODING" description:"Log encoding" choice:"console" choice:"json" default:"console"`
