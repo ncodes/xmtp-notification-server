@@ -132,6 +132,8 @@ func (l *Listener) startMessageWorkers() {
 }
 
 func (l *Listener) processEnvelope(env *v1.Envelope) error {
+	l.logger.Info("new message received. Processing...", zap.String("topic", env.ContentTopic))
+
 	if shouldIgnoreTopic(env.ContentTopic) {
 		l.logger.Info("ignoring message", zap.String("topic", env.ContentTopic))
 		return nil
@@ -143,6 +145,7 @@ func (l *Listener) processEnvelope(env *v1.Envelope) error {
 	}
 
 	if len(subs) == 0 {
+		l.logger.Info("no active subscriptions found for topic", zap.String("topic", env.ContentTopic))
 		return nil
 	}
 
